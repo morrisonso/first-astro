@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+let title = "My Site"
+---
+<BaseLayout title={ title } client:load>
+    <h1>My Profile</h1>
+    <form>
+    <ul>
+    <li>
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname">
+    </li>
+    <li>
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname">
+    </li>
+    <li>
+        <label for="bio">Bio:</label>
+        <input type="text" id="bio" name="bio">
+    </li>
+    </ul>
+    </form>
+    <input id="submit" type="submit" value="Save" onclick="results();" />
+    <p><span id="display"></span></p>
+</BaseLayout>
