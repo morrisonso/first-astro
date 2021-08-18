@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+let title = "My Site"
+---
+<BaseLayout title={ title } client:load>
+    <br>
+    <h1>Profile Logs</h1>
+    <br>
+    <form id="myForm">
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname">
+        <br>
+        <br>
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname">
+        <br>
+        <br>
+        <label for="bio">Bio:</label>
+        <input type="text" id="bio" name="bio">
+    </form>
+    <br>
+    <input id="submit" type="submit" value="Save" onclick="saveUsers();"/>
+    <br>
+    <div>
+        <p id="display">
+        </p>
+    </div>
+
+<style>
+    input {
+        width: 100%;
+    }
+
+    input[type=text], input[type=submit]  {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+    }
+</style>
+
+<script>
+    function saveUsers(e) {
+        // Uncomment line below to clear data from local storage
+        //localStorage.clear()
+
+        var firstname = document.getElementById('firstname').value;
+        var lastname = document.getElementById('lastname').value;
+        var bio = document.getElementById('bio').value;
+        var currentTime = new Date()
+
+        if(!validateForm(firstname, lastname, bio)) {
+            return false;
+        }
+
+        var userObject = {
+            fn: firstname,
+            ln: lastname,
+            b: bio,
+            time: currentTime
+        }
+
+        // Test if users is null
+        if(localStorage.getItem('users') === null) {
+            // Init array
+            var users = [];
+            // Add to array
+            users.push(userObject);
+            // Set to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            } else {
+            // Get users from localStorage
+            var users = JSON.parse(localStorage.getItem('users'));
+            // Add user to array
+            users.push(userObject);
+            // Re-set back to localStorage
+            localStorage.setItem('users', JSON.stringify(users));
+            }
+        // Clear form
+		document.getElementById('myForm').reset();
+        // Re-fetch debts
+        results();
+        // Prevent form from submitting
+        e.preventDefault();
+    }
+
+    function results()
+    {
+        // Get debts from localStorage
+        var users = JSON.parse(localStorage.getItem('users'));
+        // Get output id
+        var display = document.getElementById('display');
+        display.innerHTML = '';
+        for(var i = 0; i < users.length; i++) {
+            var firstname = users[i].fn;
+            var lastname = users[i].ln;
+            var bio = users[i].b;
+            var time = users[i].time
+            display.innerHTML += '<div class="well">'+
+                                 '<p>' + 
+                                 'Firstname: ' + firstname + '<br>' +
+                                 'Lastname: ' + lastname + '<br>' +
+                                 'Bio: ' + bio + '<br>' +
+                                 time + '<br>' +
+                                 '<p>'+ '<br>' +
+                                 '</div>';
+            
+            }
+    }
+
+    // Validate Form
+    function validateForm(firstname, lastname, bio) {
+    if(!firstname || !lastname || !bio) {
+        alert('Please fill in the form');
+        return false;
+    }
+
+    return true;
+    }
+</script>
+</BaseLayout>
